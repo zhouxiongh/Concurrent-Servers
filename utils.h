@@ -8,5 +8,6 @@
 void perror_die(char* msg);
 int listen_inet_socket(int);
 void report_peer_connected(const struct sockaddr_in*, socklen_t);
+void make_socket_non_blocking(int);
 
 #endif //ASYNC_SOCKET_SERVER_UTILS_H

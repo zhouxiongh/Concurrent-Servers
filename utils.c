@@ -8,6 +8,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <fcntl.h>
 
 #define N_BACKLOG 64
 
@@ -54,5 +55,15 @@ void report_peer_connected(const struct sockaddr_in* sa, socklen_t salen) {
         printf("peer (%s, %s) connected\n", hostbuf, portbuf);
     } else {
         printf("peer (unknown) connected\n");
+    }
+}
+
+void make_socket_non_blocking(int fd) {
+    int flags = fcntl(fd, F_GETFL, 0);
+    if (flags == -1) {
+        perror_die("fcntl F_GETFL");
+    }
+    if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
+        perror_die("fcntl F_SETFL O_NONBLOCK");
     }
 }
