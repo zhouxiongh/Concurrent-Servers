@@ -1,16 +1,38 @@
 //
 // Created by Jason on 2020/7/11.
 //
+#include "utils.h"
 
-
+#include <fcntl.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#define _GNU_SOURCE
 #include <netdb.h>
-#include <fcntl.h>
 
 #define N_BACKLOG 64
+
+
+void die(char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    vfprintf(stderr, fmt, args);
+    va_end(args);
+    fprintf(stderr, "\n");
+    exit(EXIT_FAILURE);
+}
+
+
+void* xmalloc(size_t size) {
+    void* ptr = malloc(size);
+    if (!ptr) {
+        die("malloc failed");
+    }
+    return ptr;
+}
 
 void perror_die(char* msg) {
     perror(msg);
